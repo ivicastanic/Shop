@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "order",catalog = "shop")
+@Table(name = "orders",catalog = "shop")
 public class Order implements Serializable {
     @Id
     @Column(name = "id")

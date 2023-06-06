@@ -19,7 +19,7 @@ public class Town implements Serializable {
 
     @Basic(optional = false)
     private String name;
-    @JoinColumn(name = "id_county", referencedColumnName = "id")
+    @JoinColumn(name = "id_country", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Country country;
 
