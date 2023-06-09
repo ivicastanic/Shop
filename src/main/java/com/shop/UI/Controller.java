@@ -10,10 +10,12 @@ public class Controller {
     private static Controller INSTANCE=null;
     private Stage mainStage;
     private static Employee currentEmployee;
+
     private Pane currentPane;
 
     private Controller(){
     }
+
 
     public static Employee getCurrentEmployee() {
         return currentEmployee;
