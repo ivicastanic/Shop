@@ -1,6 +1,8 @@
 package com.shop.employee.panel;
 
 import com.shop.employee.Employee;
+import com.shop.employee.privilege.Privilege;
+import com.shop.employee.privilege.service.PrivilegeServiceLocal;
 import com.shop.employee.service.EmployeeServiceLocal;
 import jakarta.persistence.*;
 import javafx.event.ActionEvent;
@@ -96,19 +98,26 @@ public class AddEmployeePanel extends GridPane {
                     employee.setSurname(surnameTextField.getText());
                     employee.setUsername(usernameTextField.getText());
                     employee.setPassword(passwordField.getText());
+                    employee.setContact(contactTextField.getText());
                     if (adminRadioButton.isSelected()) {
-                        Privilege privilege = entityManager.find(Privilege.class, 1);
+                        Privilege privilege = PrivilegeServiceLocal.SERVICE.find(1l);
                         employee.setPrivilege(privilege);
                     } else {
-                        Privilege privilege = entityManager.find(Privilege.class, 2);
+                        Privilege privilege = PrivilegeServiceLocal.SERVICE.find(2l);
                         employee.setPrivilege(privilege);
                     }
-                    entityManager.getTransaction().begin();
-                    entityManager.persist(employee);
-                    entityManager.getTransaction().commit();
-                    employeeObservableList.add(employee);
+                    EmployeeServiceLocal.SERVICE.create(employee);
                 }
             }
         }
+        clearTextField();
+    }
+
+    private void clearTextField() {
+        nameTextField.clear();
+        surnameTextField.clear();
+        usernameTextField.clear();
+        passwordField.clear();
+        contactTextField.clear();
     }
 }
