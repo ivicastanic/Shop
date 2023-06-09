@@ -1,6 +1,7 @@
 package com.shop.employee.service;
 
 import com.shop.employee.Employee;
+import javafx.collections.ObservableList;
 
 import java.util.List;
 
@@ -18,4 +19,9 @@ public interface EmployeeServiceLocal {
     Employee find(Long id);
 
     List<Employee> findAll();
+
+    Employee findbyUsername(String username);
+
+    ObservableList<Employee> loadEmployee();
+
 }

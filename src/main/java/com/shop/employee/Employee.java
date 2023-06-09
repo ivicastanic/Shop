@@ -8,6 +8,10 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "employees",catalog = "shop")
+@NamedQueries(value = {
+        @NamedQuery(name = "Employee.findAll", query = "SELECT e FROM Employee e"),
+        @NamedQuery(name = "Employee.findByUsername",query = "SELECT e FROM Employee e WHERE e.username = :username")
+})
 public class Employee implements Serializable {
     @Id
     @Column(name = "id")

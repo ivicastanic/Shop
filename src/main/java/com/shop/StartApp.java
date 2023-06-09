@@ -9,13 +9,13 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class Shop extends Application {
+public class StartApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         Controller.instance().setMainStage(stage);
         LoginPanel loginPanel=new LoginPanel();
         Scene scene = new Scene(loginPanel);
-        stage.setTitle("Shop");
+        stage.setTitle("Login");
         stage.setScene(scene);
         stage.show();
     }
