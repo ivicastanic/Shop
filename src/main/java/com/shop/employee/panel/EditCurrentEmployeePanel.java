@@ -2,17 +2,15 @@ package com.shop.employee.panel;
 
 import com.shop.UI.Controller;
 import com.shop.employee.Employee;
-import com.shop.employee.privilege.Privilege;
-import com.shop.employee.privilege.service.PrivilegeServiceLocal;
 import com.shop.employee.service.EmployeeServiceLocal;
 import jakarta.persistence.*;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 
-public class AddEmployeePanel extends GridPane {
+public class EditCurrentEmployeePanel extends GridPane {
     private final TextField nameTextField = new TextField();
     private final Label nameLabel = new Label("Ime: ");
     private final TextField surnameTextField = new TextField();
@@ -23,26 +21,32 @@ public class AddEmployeePanel extends GridPane {
     private final Label passwordLabel = new Label("Lozinka: ");
     private final TextField contactTextField = new TextField();
     private final Label contactLabel = new Label("Kontakt: ");
-    private final RadioButton adminRadioButton = new RadioButton("Admin");
-    private final RadioButton userRadioButton = new RadioButton("User");
-    private final Button addEmployeeButton = new Button("SAVE");
+    private final Button saveEmployeeButton = new Button("SAVE");
+    private Employee employee;
 
-    public AddEmployeePanel(){
+    public EditCurrentEmployeePanel(){
         setHgap(10);
         setVgap(10);
         setPadding(new Insets(20));
 
+        employee = Controller.getCurrentEmployee();
+
         //forma za editovanje
         nameTextField.setMaxWidth(200);
         nameTextField.setPromptText("Enter name...");
+        nameTextField.setText(employee.getName());
         surnameTextField.setMaxWidth(200);
         surnameTextField.setPromptText("Enter surname...");
+        surnameTextField.setText(employee.getSurname());
         usernameTextField.setMaxWidth(200);
         usernameTextField.setPromptText("Enter username...");
+        usernameTextField.setText(employee.getUsername());
         passwordField.setMaxWidth(200);
         passwordField.setPromptText("Enter password...");
+        passwordField.setText(employee.getPassword());
         contactTextField.setMaxWidth(200);
         contactTextField.setPromptText("Enter contact...");
+        contactTextField.setText(employee.getContact());
         add(nameLabel, 0, 0);
         add(nameTextField, 1, 0);
         add(surnameLabel, 0, 1);
@@ -51,22 +55,14 @@ public class AddEmployeePanel extends GridPane {
         add(usernameTextField, 1, 2);
         add(passwordLabel, 0, 3);
         add(passwordField, 1, 3);
-        add(contactLabel, 0,4);
+        add(contactLabel,0,4);
         add(contactTextField,1,4);
-
-        ToggleGroup toggleGroup = new ToggleGroup();
-        adminRadioButton.setToggleGroup(toggleGroup);
-        userRadioButton.setToggleGroup(toggleGroup);
-        userRadioButton.setSelected(true);
-        HBox radioButtonPanel = new HBox(10);
-        radioButtonPanel.getChildren().addAll(adminRadioButton, userRadioButton);
-        add(radioButtonPanel, 0, 5);
-
-        add(addEmployeeButton, 0, 6);
-        addEmployeeButton.setOnAction(this::onClickAddEmployeeButton);
+        add(saveEmployeeButton,0,5);
+        
+        saveEmployeeButton.setOnAction(this::onClickSaveEmployeeButton);
     }
 
-    private void onClickAddEmployeeButton(ActionEvent actionEvent) {
+    private void onClickSaveEmployeeButton(ActionEvent actionEvent) {
         if (nameTextField.getText().isEmpty() || surnameTextField.getText().isEmpty() || usernameTextField.getText().isEmpty() || passwordField.getText().isEmpty() || contactTextField.getText().isEmpty()) {
             Dialog dialog = new Dialog<>();
             dialog.setTitle("Greška");
@@ -77,7 +73,10 @@ public class AddEmployeePanel extends GridPane {
         } else {
             try {
                 Employee employee= EmployeeServiceLocal.SERVICE.findbyUsername(usernameTextField.getText());
-                if (employee != null) {
+                if(this.employee.getUsername().equals(usernameTextField.getText())){
+                    throw new NoResultException();
+                }
+                if (employee != null && !this.employee.getUsername().equals(usernameTextField.getText())) {
                     Dialog dialog = new Dialog<>();
                     dialog.setTitle("Greška");
                     dialog.setContentText("Korisničko ime je zauzeto!");
@@ -94,33 +93,15 @@ public class AddEmployeePanel extends GridPane {
                     dialog.setHeight(150);
                     dialog.getDialogPane().getButtonTypes().addAll(ButtonType.CANCEL);
                 }else{
-                    Employee employee = new Employee();
                     employee.setName(nameTextField.getText());
                     employee.setSurname(surnameTextField.getText());
                     employee.setUsername(usernameTextField.getText());
                     employee.setPassword(passwordField.getText());
                     employee.setContact(contactTextField.getText());
-                    if (adminRadioButton.isSelected()) {
-                        Privilege privilege = PrivilegeServiceLocal.SERVICE.find(1l);
-                        employee.setPrivilege(privilege);
-                    } else {
-                        Privilege privilege = PrivilegeServiceLocal.SERVICE.find(2l);
-                        employee.setPrivilege(privilege);
-                    }
-                    EmployeeServiceLocal.SERVICE.create(employee);
-                    Controller.instance().getAddEmployeeStage().close();
-                    Controller.instance().getEmployeePanel().getEmployeeObservableList().add(employee);
+                    EmployeeServiceLocal.SERVICE.edit(employee);
                 }
             }
         }
-        clearTextField();
     }
 
-    private void clearTextField() {
-        nameTextField.clear();
-        surnameTextField.clear();
-        usernameTextField.clear();
-        passwordField.clear();
-        contactTextField.clear();
-    }
 }

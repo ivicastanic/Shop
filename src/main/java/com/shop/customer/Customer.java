@@ -31,7 +31,7 @@ public class Customer implements Serializable {
     @Basic(optional = false)
     private String email;
     @Basic(optional = false)
-    private int points;
+    private Integer points;
     @OneToMany(mappedBy = "customer")
     private List<Order> orderList;
 

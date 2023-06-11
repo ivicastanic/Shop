@@ -75,10 +75,6 @@ public class Address implements Serializable {
 
     @Override
     public String toString() {
-        return "Address{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", town=" + town +
-                '}';
+        return name;
     }
 }

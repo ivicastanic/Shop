@@ -1,7 +1,10 @@
 package com.shop.UI.paneli;
 
 import com.shop.UI.Controller;
+import com.shop.customer.panel.CustomersPanel;
+import com.shop.employee.panel.EditCurrentEmployeePanel;
 import com.shop.employee.panel.EmployeePanel;
+import com.shop.product.panel.ProductsPanel;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,6 +16,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
 import java.time.LocalDate;
 
@@ -45,16 +49,21 @@ public class ShopPanel extends VBox {
     }
 
     private void onClickCustomersButton(ActionEvent actionEvent) {
-
+        Scene scene=new Scene(new CustomersPanel());
+        Controller.instance().getMainStage().setScene(scene);
+        Controller.instance().getMainStage().setTitle("Customers");
     }
 
     private void onClickEmployeesButton(ActionEvent actionEvent) {
         Scene scene=new Scene(new EmployeePanel());
         Controller.instance().getMainStage().setScene(scene);
-        Controller.instance().getMainStage().setTitle("Zaposlenici");
+        Controller.instance().getMainStage().setTitle("Employees");
     }
 
     private void onClickProductButton(ActionEvent actionEvent) {
+        Scene scene=new Scene(new ProductsPanel());
+        Controller.instance().getMainStage().setScene(scene);
+        Controller.instance().getMainStage().setTitle("Products");
     }
 
     private BorderPane getLogoutAndEmployeePanel() {
@@ -65,6 +74,11 @@ public class ShopPanel extends VBox {
     }
 
     private void onClickCurrentEmployeeLink(ActionEvent actionEvent) {
+        Scene scene =new Scene(new EditCurrentEmployeePanel());
+        Stage stage=new Stage();
+        stage.setScene(scene);
+        stage.setTitle("My data");
+        stage.show();
     }
 
     private FlowPane getButtonAndDatePanel() {

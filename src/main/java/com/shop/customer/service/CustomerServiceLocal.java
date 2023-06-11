@@ -1,6 +1,8 @@
 package com.shop.customer.service;
 
 import com.shop.customer.Customer;
+import com.shop.employee.Employee;
+import javafx.collections.ObservableList;
 
 
 import java.util.List;
@@ -19,4 +21,5 @@ public interface CustomerServiceLocal {
     Customer find(Long id);
 
     List<Customer> findAll();
+    ObservableList<Customer> loadCustomers();
 }
