@@ -17,4 +17,5 @@ public interface CountryServiceLocal {
     Country find(Long id);
 
     List<Country> findAll();
+    Country findByName(String name);
 }

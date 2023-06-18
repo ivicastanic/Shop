@@ -12,6 +12,9 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "orders",catalog = "shop")
+@NamedQueries(value = {
+        @NamedQuery(name = "Order.findByDate",query = "SELECT o FROM Order o WHERE o.orderDate = :date")
+})
 public class Order implements Serializable {
     @Id
     @Column(name = "id")
@@ -28,7 +31,7 @@ public class Order implements Serializable {
     @JoinColumn(name = "id_status", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private OrderStatus orderStatus;
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
     private List<OrderItem> orderItemList;
 
     public Order() {
@@ -89,11 +92,6 @@ public class Order implements Serializable {
 
     @Override
     public String toString() {
-        return "Order{" +
-                "id=" + id +
-                ", customer=" + customer +
-                ", orderDate=" + orderDate +
-                ", orderStatus=" + orderStatus +
-                '}';
+        return "Id: "+id+",    Kupac: "+customer.getName()+" "+customer.getSurname()+",    Datum: "+orderDate+",    Status: "+orderStatus.getName();
     }
 }

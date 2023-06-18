@@ -30,8 +30,8 @@ public class Customer implements Serializable {
     private String mobile;
     @Basic(optional = false)
     private String email;
-    @Basic(optional = false)
     private Integer points;
+
     @OneToMany(mappedBy = "customer")
     private List<Order> orderList;
 
@@ -100,6 +100,18 @@ public class Customer implements Serializable {
 
     public Long getId() {
         return id;
+    }
+
+    public void setPoints(Integer points) {
+        this.points = points;
+    }
+
+    public List<Order> getOrderList() {
+        return orderList;
+    }
+
+    public void setOrderList(List<Order> orderList) {
+        this.orderList = orderList;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.shop.country.town.service;
 
 
+import com.shop.country.Country;
 import com.shop.country.town.Town;
 
 import java.util.List;
@@ -19,4 +20,7 @@ public interface TownServiceLocal {
     Town find(Long id);
 
     List<Town> findAll();
+
+    List<Town> findByCountry(Country country);
+    Town findByName(String name);
 }

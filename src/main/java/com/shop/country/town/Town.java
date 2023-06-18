@@ -10,6 +10,10 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "town",catalog = "shop")
+@NamedQueries(value = {
+        @NamedQuery(name = "Town.findByCountry",query = "SELECT t FROM Town t WHERE t.country = :country"),
+        @NamedQuery(name = "Town.findByName",query = "SELECT t FROM Town t WHERE t.name = :name")
+})
 public class Town implements Serializable {
     @Id
     @Column(name = "id")
@@ -76,10 +80,6 @@ public class Town implements Serializable {
 
     @Override
     public String toString() {
-        return "Town{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", country=" + country +
-                '}';
+        return name+","+country;
     }
 }

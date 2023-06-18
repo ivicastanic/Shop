@@ -64,12 +64,7 @@ public class EditCurrentEmployeePanel extends GridPane {
 
     private void onClickSaveEmployeeButton(ActionEvent actionEvent) {
         if (nameTextField.getText().isEmpty() || surnameTextField.getText().isEmpty() || usernameTextField.getText().isEmpty() || passwordField.getText().isEmpty() || contactTextField.getText().isEmpty()) {
-            Dialog dialog = new Dialog<>();
-            dialog.setTitle("Greška");
-            dialog.setContentText("Niste popunili sva polja!");
-            dialog.show();
-            dialog.setHeight(150);
-            dialog.getDialogPane().getButtonTypes().addAll(ButtonType.CANCEL);
+            Controller.instance().showDialog("Niste popunili sva polja!");
         } else {
             try {
                 Employee employee= EmployeeServiceLocal.SERVICE.findbyUsername(usernameTextField.getText());
@@ -77,21 +72,11 @@ public class EditCurrentEmployeePanel extends GridPane {
                     throw new NoResultException();
                 }
                 if (employee != null && !this.employee.getUsername().equals(usernameTextField.getText())) {
-                    Dialog dialog = new Dialog<>();
-                    dialog.setTitle("Greška");
-                    dialog.setContentText("Korisničko ime je zauzeto!");
-                    dialog.show();
-                    dialog.setHeight(150);
-                    dialog.getDialogPane().getButtonTypes().addAll(ButtonType.CANCEL);
+                    Controller.instance().showDialog("Korisničko ime je zauzeto!");
                 }
             } catch (NoResultException e) {
                 if (passwordField.getText().length() < 6) {
-                    Dialog dialog = new Dialog<>();
-                    dialog.setTitle("Greška");
-                    dialog.setContentText("Lozinka je prekratka (minimalno 6 karaktera)!");
-                    dialog.show();
-                    dialog.setHeight(150);
-                    dialog.getDialogPane().getButtonTypes().addAll(ButtonType.CANCEL);
+                    Controller.instance().showDialog("Lozinka je prekratka (minimalno 6 karaktera)!");
                 }else{
                     employee.setName(nameTextField.getText());
                     employee.setSurname(surnameTextField.getText());

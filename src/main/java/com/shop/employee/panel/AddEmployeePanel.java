@@ -32,17 +32,11 @@ public class AddEmployeePanel extends GridPane {
         setVgap(10);
         setPadding(new Insets(20));
 
-        //forma za editovanje
-        nameTextField.setMaxWidth(200);
-        nameTextField.setPromptText("Enter name...");
-        surnameTextField.setMaxWidth(200);
-        surnameTextField.setPromptText("Enter surname...");
-        usernameTextField.setMaxWidth(200);
-        usernameTextField.setPromptText("Enter username...");
-        passwordField.setMaxWidth(200);
-        passwordField.setPromptText("Enter password...");
-        contactTextField.setMaxWidth(200);
-        contactTextField.setPromptText("Enter contact...");
+        setComponents();
+        addComponents();
+    }
+
+    private void addComponents() {
         add(nameLabel, 0, 0);
         add(nameTextField, 1, 0);
         add(surnameLabel, 0, 1);
@@ -53,6 +47,20 @@ public class AddEmployeePanel extends GridPane {
         add(passwordField, 1, 3);
         add(contactLabel, 0,4);
         add(contactTextField,1,4);
+    }
+
+    private void setComponents() {
+        //forma za dodavanje
+        nameTextField.setMaxWidth(200);
+        nameTextField.setPromptText("Enter name...");
+        surnameTextField.setMaxWidth(200);
+        surnameTextField.setPromptText("Enter surname...");
+        usernameTextField.setMaxWidth(200);
+        usernameTextField.setPromptText("Enter username...");
+        passwordField.setMaxWidth(200);
+        passwordField.setPromptText("Enter password...");
+        contactTextField.setMaxWidth(200);
+        contactTextField.setPromptText("Enter contact...");
 
         ToggleGroup toggleGroup = new ToggleGroup();
         adminRadioButton.setToggleGroup(toggleGroup);
@@ -68,31 +76,16 @@ public class AddEmployeePanel extends GridPane {
 
     private void onClickAddEmployeeButton(ActionEvent actionEvent) {
         if (nameTextField.getText().isEmpty() || surnameTextField.getText().isEmpty() || usernameTextField.getText().isEmpty() || passwordField.getText().isEmpty() || contactTextField.getText().isEmpty()) {
-            Dialog dialog = new Dialog<>();
-            dialog.setTitle("Greška");
-            dialog.setContentText("Niste popunili sva polja!");
-            dialog.show();
-            dialog.setHeight(150);
-            dialog.getDialogPane().getButtonTypes().addAll(ButtonType.CANCEL);
+            Controller.instance().showDialog("Niste popunili sva polja!");
         } else {
             try {
                 Employee employee= EmployeeServiceLocal.SERVICE.findbyUsername(usernameTextField.getText());
                 if (employee != null) {
-                    Dialog dialog = new Dialog<>();
-                    dialog.setTitle("Greška");
-                    dialog.setContentText("Korisničko ime je zauzeto!");
-                    dialog.show();
-                    dialog.setHeight(150);
-                    dialog.getDialogPane().getButtonTypes().addAll(ButtonType.CANCEL);
+                    Controller.instance().showDialog("Korisničko ime je zauzeto!");
                 }
             } catch (NoResultException e) {
                 if (passwordField.getText().length() < 6) {
-                    Dialog dialog = new Dialog<>();
-                    dialog.setTitle("Greška");
-                    dialog.setContentText("Lozinka je prekratka (minimalno 6 karaktera)!");
-                    dialog.show();
-                    dialog.setHeight(150);
-                    dialog.getDialogPane().getButtonTypes().addAll(ButtonType.CANCEL);
+                    Controller.instance().showDialog("Lozinka je prekratka (minimalno 6 karaktera)!");
                 }else{
                     Employee employee = new Employee();
                     employee.setName(nameTextField.getText());

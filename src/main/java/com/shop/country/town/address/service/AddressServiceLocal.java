@@ -20,4 +20,6 @@ public interface AddressServiceLocal {
     Address find(Long id);
 
     List<Address> findAll();
+
+    Address findByName(String name);
 }

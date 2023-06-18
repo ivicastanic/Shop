@@ -1,6 +1,8 @@
 package com.shop.product.service;
 
+import com.shop.customer.Customer;
 import com.shop.product.Product;
+import javafx.collections.ObservableList;
 
 import java.util.List;
 
@@ -18,5 +20,6 @@ public interface ProductServiceLocal {
     Product find(Long id);
 
     List<Product> findAll();
+    ObservableList<Product> loadProducts();
 
 }

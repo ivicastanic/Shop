@@ -77,11 +77,6 @@ public class OrderItem implements Serializable {
 
     @Override
     public String toString() {
-        return "OrderItem{" +
-                "order=" + order +
-                ", product=" + product +
-                ", quantity=" + quantity +
-                ", unitPrice=" + unitPrice +
-                '}';
+        return "Proizvod: "+product.getName()+"-"+product.getDescription()+",     Jedinična cijena: "+unitPrice+",     Količina: "+quantity+",     Ukupna cijena: "+quantity*unitPrice;
     }
 }

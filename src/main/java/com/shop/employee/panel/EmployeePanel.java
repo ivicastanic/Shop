@@ -56,12 +56,7 @@ public class EmployeePanel extends VBox {
 
     private void onClickSearchButton(ActionEvent actionEvent) {
         if (searchTextField.getText().isEmpty()) {
-            Dialog dialog = new Dialog<>();
-            dialog.setTitle("Greška");
-            dialog.setContentText("Unesite ime ili prezime zaposlenika kojeg želite");
-            dialog.show();
-            dialog.setHeight(150);
-            dialog.getDialogPane().getButtonTypes().addAll(ButtonType.CANCEL);
+            Controller.instance().showDialog("Unesite ime ili prezime zaposlenika kojeg želite");
         } else {
             for (int i = 0; i < employeeObservableList.size(); i++) {
                 employeeTableView.getSelectionModel().clearSelection();
@@ -106,12 +101,7 @@ public class EmployeePanel extends VBox {
             }
         }
         if (numberSelectedEmployee!=1) {
-            Dialog dialog = new Dialog<>();
-            dialog.setTitle("Greška");
-            dialog.setContentText("Selektujte zaposlenika kojeg želite izbrisati");
-            dialog.show();
-            dialog.setHeight(150);
-            dialog.getDialogPane().getButtonTypes().addAll(ButtonType.CANCEL);
+            Controller.instance().showDialog("Selektujte zaposlenika kojeg želite izbrisati");
         } else {
             Employee selectedEmployee = employeeTableView.getSelectionModel().getSelectedItem();
             employeeObservableList.remove(selectedEmployee);
