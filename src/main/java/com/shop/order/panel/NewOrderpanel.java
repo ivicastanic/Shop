@@ -24,6 +24,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -46,6 +47,8 @@ public class NewOrderpanel extends VBox {
     private final ComboBox<OrderStatus> orderStatusComboBox=new ComboBox<>();
     private final Button finishButton=new Button("Finish");
     private  List<OrderItem> orderItemList=new ArrayList<>();
+    private Hyperlink viewHyperlink =new Hyperlink();
+    private Double saldo;
 
 
 
@@ -64,8 +67,8 @@ public class NewOrderpanel extends VBox {
         HBox searchHBox=getSearchPanel();
         HBox buttonPanel=getButtonPanel();
 
-        ObservableList<OrderStatus> orderStatusObservableList = orderStatusComboBox.getItems();
 
+        ObservableList<OrderStatus> orderStatusObservableList = orderStatusComboBox.getItems();
         EntityManagerFactory entityManagerFactory= Persistence.createEntityManagerFactory(Controller.PU_NAME);
         EntityManager entityManager=entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
@@ -75,18 +78,37 @@ public class NewOrderpanel extends VBox {
         orderStatusObservableList.addAll(orderStatusList);
         orderStatusComboBox.setValue(orderStatusList.get(0));
 
-        getChildren().addAll(backAndEmployeePanel,productTableView,radioHBox,searchHBox,orderStatusComboBox,buttonPanel);
+        VBox searchVbox=new VBox(10);
+        searchVbox.getChildren().addAll(radioHBox,searchHBox);
+        VBox buttonVBox=new VBox(10);
+        buttonVBox.getChildren().addAll(orderStatusComboBox,buttonPanel);
+
+        BorderPane borderPane=new BorderPane(null,null,searchVbox,null,buttonVBox);
+
+        getChildren().addAll(backAndEmployeePanel,productTableView,borderPane);
     }
 
 
     private HBox getButtonPanel() {
         HBox buttonHBox = new HBox(10);
-        buttonHBox.getChildren().addAll(spinner, addButton,finishButton);
+        buttonHBox.getChildren().addAll(spinner, addButton,viewHyperlink,finishButton);
+        saldo = getSaldo();
+        viewHyperlink.setText(saldo + " KM");
         spinner.setEditable(true);
         spinner.setMaxWidth(100);
         addButton.setOnAction(this::onClickAddButton);
         finishButton.setOnAction(this::onClickFinishButton);
+        viewHyperlink.setOnAction(this::onClickViewHyperlink);
         return buttonHBox;
+    }
+
+    private void onClickViewHyperlink(ActionEvent actionEvent) {
+        EditNewOrderPanel editNewOrderPanel=new EditNewOrderPanel(orderItemList);
+        Scene scene=new Scene(editNewOrderPanel);
+        Stage stage=new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Edit order");
+        stage.show();
     }
 
     private void onClickFinishButton(ActionEvent actionEvent) {
@@ -147,6 +169,8 @@ public class NewOrderpanel extends VBox {
             orderItem.setUnitPrice(product.getPrice());
             orderItemList.add(orderItem);
         }
+        saldo = getSaldo();
+        viewHyperlink.setText(saldo + " KM");
     }
 
     private HBox getSearchPanel() {
