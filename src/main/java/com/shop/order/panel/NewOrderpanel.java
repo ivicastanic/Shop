@@ -51,7 +51,6 @@ public class NewOrderpanel extends VBox {
     private Double saldo;
 
 
-
     public NewOrderpanel(Customer customer){
         setSpacing(10);
         setPadding(new Insets(10));
@@ -89,6 +88,7 @@ public class NewOrderpanel extends VBox {
     }
 
 
+
     private HBox getButtonPanel() {
         HBox buttonHBox = new HBox(10);
         buttonHBox.getChildren().addAll(spinner, addButton,viewHyperlink,finishButton);
@@ -103,7 +103,7 @@ public class NewOrderpanel extends VBox {
     }
 
     private void onClickViewHyperlink(ActionEvent actionEvent) {
-        EditNewOrderPanel editNewOrderPanel=new EditNewOrderPanel(orderItemList);
+        EditNewOrderPanel editNewOrderPanel=new EditNewOrderPanel(this);
         Scene scene=new Scene(editNewOrderPanel);
         Stage stage=new Stage();
         stage.setScene(scene);
@@ -257,5 +257,13 @@ public class NewOrderpanel extends VBox {
         Scene scene = new Scene(new CustomersPanel());
         Controller.instance().getMainStage().setScene(scene);
         Controller.instance().getMainStage().setTitle("Customers");
+    }
+
+    public void refresh(){
+        saldo = getSaldo();
+        viewHyperlink.setText(saldo + " KM");
+    }
+    public List<OrderItem> getOrderItemList(){
+        return  orderItemList;
     }
 }

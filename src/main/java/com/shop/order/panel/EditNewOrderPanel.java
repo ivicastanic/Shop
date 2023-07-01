@@ -1,10 +1,12 @@
 package com.shop.order.panel;
 
+import com.shop.UI.Controller;
 import com.shop.customer.Customer;
 import com.shop.customer.service.CustomerServiceLocal;
 import com.shop.order.order_item.OrderItem;
 import com.shop.order.order_item.service.OrderItemServiceLocal;
 import com.shop.product.Product;
+import com.shop.product.service.ProductServiceLocal;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,6 +19,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.VBox;
 import javafx.util.converter.IntegerStringConverter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -25,7 +28,12 @@ public class EditNewOrderPanel extends VBox {
     private TableView<OrderItem> orderItemTableView = new TableView<>();
     private ObservableList<OrderItem> orderItemObservableList;
     private final Button deleteButton=new Button("Delete");
-    public EditNewOrderPanel(List<OrderItem> orderItemList){
+    private List<OrderItem>orderItemList;
+    private NewOrderpanel newOrderPanel;
+
+    public EditNewOrderPanel(NewOrderpanel newOrderpanel){
+        this.newOrderPanel=newOrderpanel;
+        orderItemList=newOrderpanel.getOrderItemList();
         setupTableView(orderItemList);
         deleteButton.setOnAction(this::onCLickDeleteButton);
 
@@ -35,6 +43,19 @@ public class EditNewOrderPanel extends VBox {
     }
 
     private void onCLickDeleteButton(ActionEvent actionEvent) {
+        int numberSelectedProducts=0;
+        for(int i=0;i<orderItemObservableList.size();i++){
+            if(orderItemTableView.getSelectionModel().isSelected(i)){
+                numberSelectedProducts++;
+            }
+        }
+        if (numberSelectedProducts!=1) {
+            Controller.instance().showDialog("Selektujte stavku koju želite izbrisati");
+        } else {
+            OrderItem selectedOrderItem = orderItemTableView.getSelectionModel().getSelectedItem();
+            orderItemObservableList.remove(selectedOrderItem);
+            newOrderPanel.refresh();
+        }
     }
 
     private void setupTableView(List<OrderItem> orderItemList) {
@@ -62,6 +83,7 @@ public class EditNewOrderPanel extends VBox {
     private <E> void onFiledChange(TableColumn.CellEditEvent<OrderItem, E> event, Consumer<OrderItem> orderItemConsumer) {
         OrderItem editOrderItem = event.getRowValue();
         orderItemConsumer.accept(editOrderItem);
-        OrderItemServiceLocal.SERVICE.edit(editOrderItem);
+        orderItemList=orderItemObservableList;
+        newOrderPanel.refresh();
     }
 }
