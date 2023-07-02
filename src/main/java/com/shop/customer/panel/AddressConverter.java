@@ -4,6 +4,7 @@ import com.shop.country.Country;
 import com.shop.country.service.CountryServiceLocal;
 import com.shop.country.town.Town;
 import com.shop.country.town.address.Address;
+import com.shop.country.town.address.service.AddressServiceLocal;
 import com.shop.country.town.service.TownServiceLocal;
 import javafx.util.StringConverter;
 
@@ -24,6 +25,11 @@ public class AddressConverter extends StringConverter<Address> {
         Country country= CountryServiceLocal.SERVICE.findByName(stringTokenizer.nextToken());
         town.setCountry(country);
         address.setTown(town);
+        try{
+            address=AddressServiceLocal.SERVICE.findByName(address.getName());
+        }catch (Exception e){
+            AddressServiceLocal.SERVICE.create(address);
+        }
         return address;
     }
 }

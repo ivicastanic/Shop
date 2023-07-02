@@ -210,8 +210,8 @@ public class CustomersPanel extends VBox {
         TableColumn<Customer, Integer> pointsColumn = new TableColumn<>("Poeni");
         pointsColumn.setCellValueFactory(new PropertyValueFactory<>("points"));
         pointsColumn.setMinWidth(100);
-        pointsColumn.setCellFactory(TextFieldTableCell.<Customer, Integer>forTableColumn(new IntegerStringConverter()));
-        pointsColumn.setOnEditCommit(event -> onFiledChange(event, r -> r.setPoints(event.getNewValue())));
+        //pointsColumn.setCellFactory(TextFieldTableCell.<Customer, Integer>forTableColumn(new IntegerStringConverter()));
+        //pointsColumn.setOnEditCommit(event -> onFiledChange(event, r -> r.setPoints(event.getNewValue())));
 
         customerTableView.getColumns().addAll(idColumn, nameColumn, surnameColumn, birthdayColumn, addressColumn, mobileColumn, emailColumn, pointsColumn);
     }

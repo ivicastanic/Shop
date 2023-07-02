@@ -97,6 +97,7 @@ public class Controller {
     }
 
     public Stage getMainStage() {
+        mainStage.centerOnScreen();
         return mainStage;
     }
 

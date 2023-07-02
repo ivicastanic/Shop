@@ -49,6 +49,7 @@ public class NewOrderpanel extends VBox {
     private  List<OrderItem> orderItemList=new ArrayList<>();
     private Hyperlink viewHyperlink =new Hyperlink();
     private Double saldo;
+    private final CheckBox pointsCheckBox =new CheckBox("Poeni");
 
 
     public NewOrderpanel(Customer customer){
@@ -76,17 +77,25 @@ public class NewOrderpanel extends VBox {
         entityManager.getTransaction().commit();
         orderStatusObservableList.addAll(orderStatusList);
         orderStatusComboBox.setValue(orderStatusList.get(0));
+        orderStatusComboBox.setMinWidth(150);
+        pointsCheckBox.setOnAction(this::onCLickPointsCheckBox);
+
+        HBox comboBoxCheckBoxPanel=new HBox(10);
+        comboBoxCheckBoxPanel.getChildren().addAll(orderStatusComboBox,pointsCheckBox);
 
         VBox searchVbox=new VBox(10);
         searchVbox.getChildren().addAll(radioHBox,searchHBox);
         VBox buttonVBox=new VBox(10);
-        buttonVBox.getChildren().addAll(orderStatusComboBox,buttonPanel);
+        buttonVBox.getChildren().addAll(comboBoxCheckBoxPanel,buttonPanel);
 
         BorderPane borderPane=new BorderPane(null,null,searchVbox,null,buttonVBox);
 
         getChildren().addAll(backAndEmployeePanel,productTableView,borderPane);
     }
 
+    private void onCLickPointsCheckBox(ActionEvent actionEvent) {
+        refresh();
+    }
 
 
     private HBox getButtonPanel() {
@@ -95,7 +104,7 @@ public class NewOrderpanel extends VBox {
         saldo = getSaldo();
         viewHyperlink.setText(saldo + " KM");
         spinner.setEditable(true);
-        spinner.setMaxWidth(100);
+        spinner.setMaxWidth(150);
         addButton.setOnAction(this::onClickAddButton);
         finishButton.setOnAction(this::onClickFinishButton);
         viewHyperlink.setOnAction(this::onClickViewHyperlink);
@@ -137,6 +146,8 @@ public class NewOrderpanel extends VBox {
         order.setCustomer(currentCustomer);
         order.setOrderDate(LocalDate.now());
         order.setOrderStatus(orderStatusComboBox.getValue());
+
+        CustomerServiceLocal.SERVICE.edit(currentCustomer);
     }
 
     private double getSaldo() {
@@ -144,6 +155,15 @@ public class NewOrderpanel extends VBox {
         for (int i = 0; i < orderItemList.size(); i++) {
             OrderItem orderItem = orderItemList.get(i);
             saldo += orderItem.getUnitPrice() * orderItem.getQuantity();
+        }
+        if(pointsCheckBox.isSelected()){
+            if(saldo<currentCustomer.getPoints()){
+                currentCustomer.setPoints(currentCustomer.getPoints()-(int)saldo);
+                saldo=0;
+            }else{
+                saldo=saldo-currentCustomer.getPoints();
+                currentCustomer.setPoints(0);
+            }
         }
         return saldo;
     }
@@ -162,6 +182,15 @@ public class NewOrderpanel extends VBox {
             if(product.getQuantity()<spinner.getValue()){
                 Controller.instance().showDialog("Na stanju je trenutno: "+product.getQuantity()+" "+product.getName()+", "+product.getDescription());
                 return;
+            }
+            for (int i=0;i<orderItemList.size();i++){
+                OrderItem orderItem=orderItemList.get(i);
+                if(orderItem.getProduct()==product){
+                    orderItem.setQuantity(orderItem.getQuantity()+spinner.getValue());
+                    saldo = getSaldo();
+                    viewHyperlink.setText(saldo + " KM");
+                    return;
+                }
             }
             OrderItem orderItem=new OrderItem();
             orderItem.setProduct(product);

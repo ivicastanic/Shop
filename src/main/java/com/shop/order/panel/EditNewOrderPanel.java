@@ -58,6 +58,7 @@ public class EditNewOrderPanel extends VBox {
         }
     }
 
+
     private void setupTableView(List<OrderItem> orderItemList) {
         orderItemObservableList= FXCollections.observableList(orderItemList);
         orderItemTableView.setItems(orderItemObservableList);
