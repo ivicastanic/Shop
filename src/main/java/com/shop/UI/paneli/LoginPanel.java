@@ -1,6 +1,7 @@
 package com.shop.UI.paneli;
 
 import com.shop.UI.Controller;
+import com.shop.UI.password.PasswordValidator;
 import com.shop.employee.Employee;
 import com.shop.employee.service.EmployeeServiceLocal;
 import jakarta.persistence.NoResultException;
@@ -66,7 +67,9 @@ public class LoginPanel extends GridPane {
     private void login(String username, String password) {
         try {
             Employee employee = EmployeeServiceLocal.SERVICE.findbyUsername(username);
-            if (employee != null && password.equals(employee.getPassword())) {
+            PasswordValidator passwordValidator = new PasswordValidator();
+            String employeeStoredPassword = employee.getPassword();
+            if (employee != null && passwordValidator.validatePassword(password, employeeStoredPassword)) {
                 Controller.setCurrentEmployee(employee);
                 Scene scene = new Scene(new ShopPanel());
                 Controller.instance().getMainStage().setScene(scene);

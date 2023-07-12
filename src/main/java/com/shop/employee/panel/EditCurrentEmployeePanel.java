@@ -1,6 +1,7 @@
 package com.shop.employee.panel;
 
 import com.shop.UI.Controller;
+import com.shop.UI.password.PlainPassHashGenerator;
 import com.shop.employee.Employee;
 import com.shop.employee.service.EmployeeServiceLocal;
 import jakarta.persistence.*;
@@ -9,6 +10,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
 public class EditCurrentEmployeePanel extends GridPane {
     private final TextField nameTextField = new TextField();
@@ -23,8 +25,10 @@ public class EditCurrentEmployeePanel extends GridPane {
     private final Label contactLabel = new Label("Kontakt: ");
     private final Button saveEmployeeButton = new Button("SAVE");
     private Employee employee;
+    private final Stage currentStage;
 
-    public EditCurrentEmployeePanel(){
+    public EditCurrentEmployeePanel(Stage stage){
+        currentStage=stage;
         setHgap(10);
         setVgap(10);
         setPadding(new Insets(20));
@@ -81,9 +85,13 @@ public class EditCurrentEmployeePanel extends GridPane {
                     employee.setName(nameTextField.getText());
                     employee.setSurname(surnameTextField.getText());
                     employee.setUsername(usernameTextField.getText());
-                    employee.setPassword(passwordField.getText());
+                    if(!passwordField.getText().equals(employee.getPassword())){
+                        String hashedPassword = new PlainPassHashGenerator().generateHashedPassword(passwordField.getText());
+                        employee.setPassword(hashedPassword);
+                    }
                     employee.setContact(contactTextField.getText());
                     EmployeeServiceLocal.SERVICE.edit(employee);
+                    currentStage.close();
                 }
             }
         }

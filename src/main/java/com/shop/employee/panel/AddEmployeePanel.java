@@ -1,6 +1,7 @@
 package com.shop.employee.panel;
 
 import com.shop.UI.Controller;
+import com.shop.UI.password.PlainPassHashGenerator;
 import com.shop.employee.Employee;
 import com.shop.employee.privilege.Privilege;
 import com.shop.employee.privilege.service.PrivilegeServiceLocal;
@@ -91,7 +92,8 @@ public class AddEmployeePanel extends GridPane {
                     employee.setName(nameTextField.getText());
                     employee.setSurname(surnameTextField.getText());
                     employee.setUsername(usernameTextField.getText());
-                    employee.setPassword(passwordField.getText());
+                    String hashedPassword = new PlainPassHashGenerator().generateHashedPassword(passwordField.getText());
+                    employee.setPassword(hashedPassword);
                     employee.setContact(contactTextField.getText());
                     if (adminRadioButton.isSelected()) {
                         Privilege privilege = PrivilegeServiceLocal.SERVICE.find(1l);

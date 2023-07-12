@@ -79,8 +79,8 @@ public class ShopPanel extends VBox {
     }
 
     private void onClickCurrentEmployeeLink(ActionEvent actionEvent) {
-        Scene scene = new Scene(new EditCurrentEmployeePanel());
         Stage stage = new Stage();
+        Scene scene = new Scene(new EditCurrentEmployeePanel(stage));
         stage.setScene(scene);
         stage.setTitle("My data");
         stage.show();
