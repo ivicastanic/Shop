@@ -32,7 +32,7 @@ public class Customer implements Serializable {
     private String email;
     private Integer points;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)
     private List<Order> orderList;
 
     public Customer() {

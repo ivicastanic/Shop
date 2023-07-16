@@ -55,7 +55,7 @@ public class ProductsPanel extends VBox {
 
     private HBox getButtonPanel() {
         HBox buttonHBox = new HBox(10);
-        buttonHBox.getChildren().addAll(addProductButton, deleteProductButton, deleteCheckBox);
+        buttonHBox.getChildren().addAll(addProductButton/*,deleteProductButton, deleteCheckBox*/);
         addProductButton.setOnAction(this::onClickAddCustomerButton);
         deleteProductButton.setOnAction(this::onClickDeleteCustomerButton);
         deleteProductButton.setDisable(true);

@@ -174,13 +174,11 @@ public class CustomersPanel extends VBox {
 
         TableColumn<Customer, String> nameColumn = new TableColumn<>("Ime");
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        nameColumn.setMinWidth(100);
         nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         nameColumn.setOnEditCommit(event -> onFiledChange(event, r -> r.setName(event.getNewValue())));
 
         TableColumn<Customer, String> surnameColumn = new TableColumn<>("Prezime");
         surnameColumn.setCellValueFactory(new PropertyValueFactory<>("surname"));
-        surnameColumn.setMinWidth(100);
         surnameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         surnameColumn.setOnEditCommit(event -> onFiledChange(event, r -> r.setSurname(event.getNewValue())));
 
@@ -197,7 +195,6 @@ public class CustomersPanel extends VBox {
 
         TableColumn<Customer, String> mobileColumn = new TableColumn<>("Mobitel");
         mobileColumn.setCellValueFactory(new PropertyValueFactory<>("mobile"));
-        mobileColumn.setMinWidth(100);
         mobileColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         mobileColumn.setOnEditCommit(event -> onFiledChange(event, r -> r.setMobile(event.getNewValue())));
 
