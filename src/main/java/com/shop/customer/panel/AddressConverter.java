@@ -18,18 +18,31 @@ public class AddressConverter extends StringConverter<Address> {
 
     @Override
     public Address fromString(String s) {
-        StringTokenizer stringTokenizer=new StringTokenizer(s,",");
-        Address address=new Address();
+        StringTokenizer stringTokenizer = new StringTokenizer(s, ",");
+        Address address = new Address();
         address.setName(stringTokenizer.nextToken());
-        Town town= TownServiceLocal.SERVICE.findByName(stringTokenizer.nextToken());
-        Country country= CountryServiceLocal.SERVICE.findByName(stringTokenizer.nextToken());
+        Town town = new Town();
+        town.setName(stringTokenizer.nextToken());
+        Country country = new Country();
+        country.setName(stringTokenizer.nextToken());
+        try {
+            country = CountryServiceLocal.SERVICE.findByName(country.getName());
+        } catch (Exception e) {
+            CountryServiceLocal.SERVICE.create(country);
+        }
         town.setCountry(country);
+        try {
+            town = TownServiceLocal.SERVICE.findByName(town.getName());
+        } catch (Exception e) {
+            TownServiceLocal.SERVICE.create(town);
+        }
         address.setTown(town);
-        try{
-            address=AddressServiceLocal.SERVICE.findByName(address.getName());
-        }catch (Exception e){
+        try {
+            address = AddressServiceLocal.SERVICE.findByName(address.getName());
+        } catch (Exception e) {
             AddressServiceLocal.SERVICE.create(address);
         }
+        System.out.println(address);
         return address;
     }
 }
